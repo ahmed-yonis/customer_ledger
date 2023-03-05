@@ -1,5 +1,5 @@
 {
- "add_total_row": 0,
+ "add_total_row": 1,
  "columns": [],
  "creation": "2023-03-03 20:53:21.459974",
  "disable_prepared_report": 0,
@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "Insiders Business Technology",
- "modified": "2023-03-03 21:03:49.322915",
+ "modified": "2023-03-05 12:12:08.634495",
  "modified_by": "Administrator",
  "module": "Customer Ledger",
  "name": "Supplier Ledger",

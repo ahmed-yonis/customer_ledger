@@ -1020,7 +1020,7 @@ class AccountsReceivableSummary(ReceivablePayableReport):
 
 			for i in currencies:
 				if row.currency == i:
-					row[frappe.scrub(i)] = row.outstanding
+					row[frappe.scrub(i)] = flt(row.outstanding)
 
 			self.data.append(row)
 
@@ -1040,24 +1040,30 @@ class AccountsReceivableSummary(ReceivablePayableReport):
 			self.set_party_details(d)
 
 	def init_party_total(self, row):
+		d_row = {
+				"invoiced": 0.0,
+				"paid": 0.0,
+				"credit_note": 0.0,
+				"outstanding": 0.0,
+				"range1": 0.0,
+				"range2": 0.0,
+				"range3": 0.0,
+				"range4": 0.0,
+				"range5": 0.0,
+				"total_due": 0.0,
+				"sales_person": [],
+					
+			}
+		for i in get_currencies():
+			d_row.update({frappe.scrub(i): 0.0})
+
 		self.party_total.setdefault(
 			row.party,
 			frappe._dict(
-				{
-					"invoiced": 0.0,
-					"paid": 0.0,
-					"credit_note": 0.0,
-					"outstanding": 0.0,
-					"range1": 0.0,
-					"range2": 0.0,
-					"range3": 0.0,
-					"range4": 0.0,
-					"range5": 0.0,
-					"total_due": 0.0,
-					"sales_person": [],
-				}
-			),
+				d_row
+			), 
 		)
+
 
 	def set_party_details(self, row):
 		self.party_total[row.party].currency = row.currency
@@ -1092,13 +1098,19 @@ class AccountsReceivableSummary(ReceivablePayableReport):
 			if self.filters.show_sales_person:
 				self.add_column(label=_("Sales Person"), fieldname="sales_person", fieldtype="Data")
 
-		self.add_column(_("Outstanding Amount"), fieldname="outstanding")
+		# self.add_column(_("Outstanding Amount"), fieldname="outstanding")
 
 		
 		currencies = get_currencies()
 
 		for i in currencies:
-			self.add_column(label=i, fieldname=frappe.scrub(i), fieldtype="Currency")
+			self.add_column(
+				label= i,
+				fieldname= frappe.scrub(i),
+				fieldtype= "Currency",
+				options= "currency",
+				width= 120,
+			)
 
 
 def get_currencies():
